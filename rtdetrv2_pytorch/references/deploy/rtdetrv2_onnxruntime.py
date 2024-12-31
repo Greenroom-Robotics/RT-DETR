@@ -35,7 +35,7 @@ def main(args, ):
     sess = ort.InferenceSession(args.onnx_file)
     print(ort.get_device())
 
-    im_pil = Image.open(args.im_file).convert('RGB')
+    im_pil = Image.open(args.im_file).convert('RGB') # np array shape is: (H, W, C)
     w, h = im_pil.size
     
     use_torchvision = False
@@ -50,7 +50,6 @@ def main(args, ):
         im_resized = im_pil.resize((1280,1280), Image.BILINEAR)
         im_data_pil = np.transpose(np.array(im_resized).astype(np.float32) / 255.0, (2, 0, 1))  # Shape: (C, H, W)
         im_data = np.expand_dims(im_data_pil, axis=0)  # Shape: (1, C, H, W)
-        im_data = np.ascontiguousarray(im_data)
 
     output = sess.run(
         output_names=None,
