@@ -51,8 +51,9 @@ def main(args, ):
 
     model = Model()
 
-    data = torch.rand(1, 3, 1280, 1280)
-    size = torch.tensor([[1280, 1280]])
+    resize_h, resize_w = (1280, 1280)
+    data = torch.rand(1, 3, resize_h, resize_w)
+    size = torch.tensor([[resize_h, resize_w]])
     _ = model(data, size)
 
     dynamic_axes = {
@@ -82,6 +83,9 @@ def main(args, ):
     add_meta(onnx_model, 
              key="model", 
              value="RT-DETR")
+    add_meta(onnx_model, 
+             key="input_shape", 
+             value=json.dumps((resize_h, resize_w)))    
     onnx.save(onnx_model, args.output_file)
 
     if args.check:
