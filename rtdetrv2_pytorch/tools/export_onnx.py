@@ -80,7 +80,7 @@ def main(args, ):
              value=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     add_meta(onnx_model, 
              key="classes", 
-             value=json.dumps({k:v for k, v in enumerate(args.class_names)}))
+             value=json.dumps(args.class_names))
     add_meta(onnx_model, 
              key="model", 
              value="RT-DETR")

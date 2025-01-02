@@ -117,7 +117,7 @@ CUDA_VISIBLE_DEVICES=0,1,2,3 torchrun --master_port=9909 --nproc_per_node=4 tool
 <!-- <summary>4. Export onnx </summary> -->
 4. Export onnx
 ```shell
-python tools/export_onnx.py -c path/to/config -r path/to/checkpoint --check
+python tools/export_onnx.py -c path/to/config -r path/to/checkpoint --check --simplify
 ```
 
 <!-- <summary>5. Inference </summary> -->
@@ -125,9 +125,15 @@ python tools/export_onnx.py -c path/to/config -r path/to/checkpoint --check
 
 Support torch, onnxruntime, tensorrt and openvino, see details in *references/deploy*
 ```shell
-python references/deploy/rtdetrv2_onnx.py --onnx-file=model.onnx --im-file=xxxx
+python references/deploy/rtdetrv2_onnxruntime.py --onnx-file=model.onnx --im-file=xxxx
 python references/deploy/rtdetrv2_tensorrt.py --trt-file=model.trt --im-file=xxxx
 python references/deploy/rtdetrv2_torch.py -c path/to/config -r path/to/checkpoint --im-file=xxx --device=cuda:0
+```
+
+6. Log onnx to mlflow
+
+```shell
+python tools/log_mlflow_model.py --onnx model.onnx --run-id xxx
 ```
 </details>
 
