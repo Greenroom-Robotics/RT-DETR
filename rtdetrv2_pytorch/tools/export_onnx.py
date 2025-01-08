@@ -56,6 +56,7 @@ def main(args, ):
     size = torch.tensor([[resize_h, resize_w]])
     _ = model(data, size)
 
+    # Enable dynamic batch size
     dynamic_axes = {
         'images': {0: 'N', },
         'orig_target_sizes': {0: 'N'}
@@ -75,11 +76,11 @@ def main(args, ):
 
     onnx_model = onnx.load(args.output_file)
     add_meta(onnx_model, 
-             key="data", 
+             key="date", 
              value=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     add_meta(onnx_model, 
              key="classes", 
-             value=json.dumps({k:v for k, v in enumerate(args.class_names)}))
+             value=json.dumps(args.class_names))
     add_meta(onnx_model, 
              key="model", 
              value="RT-DETR")
