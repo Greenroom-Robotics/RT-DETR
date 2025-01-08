@@ -74,7 +74,7 @@ def log_onnx(args):
     model = onnx.load(args.onnx) 
     metadata = {mp.key:mp.value for mp in model.metadata_props}
     metadata['input_shape'] = json.loads(metadata['input_shape'])
-    metadata['classes'] = list(json.loads(metadata['classes']).values())
+    metadata['classes'] = json.loads(metadata['classes'])
     signature = get_signature(input_shape=metadata['input_shape'])
 
     print('Logging to MLflow...')
