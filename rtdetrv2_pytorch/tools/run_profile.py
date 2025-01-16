@@ -21,7 +21,7 @@ __all__ = ["profile_stats"]
 def profile_stats(
     model: nn.Module, 
     data: Optional[Tensor]=None, 
-    shape: List[int]=[1, 3, 640, 640], 
+    shape: List[int]=[1, 3, 1280, 1280], 
     verbose: bool=False
 ) -> Dict[str, Any]:
     
