@@ -65,7 +65,7 @@ class RTDETRPostProcessor(nn.Module):
 
             # Probability of each class
             soft_labels = F.softmax(logits[:,:,1:], dim=-1)
-            labels = soft_labels.gather(dim=1, index=index.unsqueeze(-1).tile(1, 1, boxes.shape[-1]))
+            labels = soft_labels.gather(dim=1, index=index.unsqueeze(-1).tile(1, 1, soft_labels.shape[-1]))
             boxes = bbox_pred.gather(dim=1, index=index.unsqueeze(-1).tile(1, 1, boxes.shape[-1]))
 
         else:

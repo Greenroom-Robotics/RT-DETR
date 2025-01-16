@@ -109,9 +109,12 @@ CUDA_VISIBLE_DEVICES=0,1,2,3 torchrun --master_port=9909 --nproc_per_node=4 tool
 ```
 
 <!-- <summary>3. Tuning </summary> -->
-3. Tuning
+3. Tuning (aka. transfer learning)
 ```shell
 CUDA_VISIBLE_DEVICES=0,1,2,3 torchrun --master_port=9909 --nproc_per_node=4 tools/train.py -c path/to/config -t path/to/checkpoint --use-amp --seed=0 &> log.txt 2>&1 &
+
+# Or with single GPU
+nohup python3 tools/train.py -c path/to/config -t path/to/checkpoint --use-amp --seed=0 &> log.txt 2>&1 &
 ```
 
 <!-- <summary>4. Export onnx </summary> -->
