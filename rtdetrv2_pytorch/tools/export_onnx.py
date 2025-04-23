@@ -51,7 +51,7 @@ def main(args, ):
 
     model = Model()
 
-    resize_h, resize_w = (1280, 1280)
+    resize_h, resize_w = (args.input_size, args.input_size)
     data = torch.rand(1, 3, resize_h, resize_w)
     size = torch.tensor([[resize_h, resize_w]])
     _ = model(data, size)
@@ -73,6 +73,7 @@ def main(args, ):
         verbose=False,
         do_constant_folding=True,
     )
+    classes = list(cfg.train_dataloader.dataset.category2name.values())
 
     onnx_model = onnx.load(args.output_file)
     add_meta(onnx_model, 
@@ -80,7 +81,7 @@ def main(args, ):
              value=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     add_meta(onnx_model, 
              key="classes", 
-             value=json.dumps(args.class_names))
+             value=json.dumps(classes))
     add_meta(onnx_model, 
              key="model", 
              value="RT-DETR")
@@ -106,7 +107,7 @@ if __name__ == '__main__':
     parser.add_argument('--config', '-c', type=str, )
     parser.add_argument('--resume', '-r', type=str, )
     parser.add_argument('--output_file', '-o', type=str, default='model.onnx')
-    parser.add_argument('--class_names', nargs='+', default=['marine_mammal', 'marker', 'unknown', 'vessel'], help='class list in the same order as class enum')
+    parser.add_argument('--input_size', '-s', type=int, default=1280, help="-s 640 for IR, -s 1280 for RGB")
     parser.add_argument('--check',  action='store_true', default=False,)
     parser.add_argument('--simplify',  action='store_true', default=False,)
     args = parser.parse_args()

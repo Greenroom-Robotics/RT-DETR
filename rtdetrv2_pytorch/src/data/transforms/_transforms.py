@@ -122,10 +122,11 @@ class ConvertPILImage(T.Transform):
     _transformed_types = (
         PIL.Image.Image,
     )
-    def __init__(self, dtype='float32', scale=True) -> None:
+    def __init__(self, dtype='float32', scale=True, single_channel=False) -> None:
         super().__init__()
         self.dtype = dtype
         self.scale = scale
+        self.single_channel = single_channel
 
     def _transform(self, inpt: Any, params: Dict[str, Any]) -> Any:  
         inpt = F.pil_to_tensor(inpt)
@@ -134,6 +135,9 @@ class ConvertPILImage(T.Transform):
 
         if self.scale:
             inpt = inpt / 255.
+
+        if self.single_channel:
+            inpt = inpt[0,:,:]
 
         inpt = Image(inpt)
 
