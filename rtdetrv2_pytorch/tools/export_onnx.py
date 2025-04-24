@@ -52,7 +52,7 @@ def main(args, ):
     model = Model()
 
     resize_h, resize_w = (args.input_size, args.input_size)
-    data = torch.rand(1, 3, resize_h, resize_w)
+    data = torch.rand(1, args.image_channels, resize_h, resize_w)
     size = torch.tensor([[resize_h, resize_w]])
     _ = model(data, size)
 
@@ -108,6 +108,7 @@ if __name__ == '__main__':
     parser.add_argument('--resume', '-r', type=str, )
     parser.add_argument('--output_file', '-o', type=str, default='model.onnx')
     parser.add_argument('--input_size', '-s', type=int, default=1280, help="-s 640 for IR, -s 1280 for RGB")
+    parser.add_argument('--image_channels', '-i', type=int, default=3, help="Number of image channels. IR has 1 channel")
     parser.add_argument('--check',  action='store_true', default=False,)
     parser.add_argument('--simplify',  action='store_true', default=False,)
     args = parser.parse_args()
