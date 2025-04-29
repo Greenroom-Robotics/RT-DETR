@@ -7,8 +7,8 @@ __include__: [
 ]
 
 
-output_dir: ./output/rtdetrv2_r18vd_120e_1280_d25-001_12cls
-num_classes: 13 # Has to be actual number of classes + 1
+output_dir: ./output/rtdetrv2_r18vd_120e_ir_3ch
+num_classes: 8 # Has to be actual number of classes + 1
 epoches: 120
 
 train_dataloader: 
@@ -16,17 +16,16 @@ train_dataloader:
   dataset: 
     type: CocoDetection
     img_folder: ./data
-    ann_file: ./data/datasets/image/experiments/e25-001-d25-001-12cls/coco_labels/split_train.mapped.json
+    ann_file: ./data/public/massmind/coco_labels/train.mapped.json
     return_masks: False
     transforms:
       type: Compose
       ops:
-        - {type: RandomPhotometricDistort, p: 0.5}
         - {type: RandomZoomOut, fill: 0}
         - {type: RandomIoUCrop, p: 0.8}
         - {type: SanitizeBoundingBoxes, min_size: 1}
         - {type: RandomHorizontalFlip}
-        - {type: Resize, size: [1280, 1280], }
+        - {type: Resize, size: [640, 640], }
         - {type: SanitizeBoundingBoxes, min_size: 1}
         - {type: ConvertPILImage, dtype: 'float32', scale: True}   
         - {type: ConvertBoxes, fmt: 'cxcywh', normalize: True}    
@@ -35,7 +34,7 @@ train_dataloader:
   collate_fn:
     type: BatchImageCollateFuncion  
     scales: ~
-  total_batch_size: 6
+  total_batch_size: 18
   shuffle: True
   num_workers: 4
   drop_last: True 
@@ -45,12 +44,12 @@ val_dataloader:
   dataset: 
     type: CocoDetection
     img_folder: ./data
-    ann_file: ./data/datasets/image/experiments/e25-001-d25-001-12cls/coco_labels/split_test.mapped.json
+    ann_file: ./data/public/massmind/coco_labels/test.mapped.json
     return_masks: False
     transforms:
       type: Compose
       ops: 
-        - {type: Resize, size: [1280, 1280]}
+        - {type: Resize, size: [640, 640]}
         - {type: ConvertPILImage, dtype: 'float32', scale: True}   
   total_batch_size: 32
   shuffle: False
@@ -82,4 +81,4 @@ optimizer:
       params: '^(?=.*(?:norm|bn)).*$'
       weight_decay: 0.
 
-eval_spatial_size: [1280, 1280]
+eval_spatial_size: [640, 640]
