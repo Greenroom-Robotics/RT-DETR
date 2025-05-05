@@ -1,3 +1,10 @@
+""" 
+Log an onnx model to mlflow.
+
+If you specify run-id, it'll log to the existing run. If you specify an experiment name,
+it'll create a new run in that experiment. 
+"""
+
 import os 
 import sys 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
@@ -5,8 +12,9 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'
 import mlflow
 import datetime
 import numpy as np
+from typing import Tuple
 
-def get_signature(input_shape=(1280,1280)):
+def get_signature(input_shape: Tuple[int, int]) -> mlflow.models.ModelSignature:
     from mlflow.types import Schema, TensorSpec
     from mlflow.models import ModelSignature
 
@@ -84,12 +92,15 @@ def log_onnx(args):
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('--config', '-c', type=str, default=None, help="only required if --ckpt specified")
-    parser.add_argument('--ckpt', type=str, default=None, help="Logging a torch model also requires --config to be specified")
-    parser.add_argument('--onnx', type=str, default=None)
-    parser.add_argument('--class_names', nargs='+', default=['marine_mammal', 'marker', 'unknown', 'vessel'], help='class list in the same order as class enum')
-    parser.add_argument('--run-id', type=str, default=None)
-    parser.add_argument('--experiment', type=str, default=None)
+
+    # Unused arguments for pytorch logging to mlflow
+    # parser.add_argument('--config', '-c', type=str, default=None, help="only required if --ckpt specified")
+    # parser.add_argument('--ckpt', type=str, default=None, help="Logging a torch model also requires --config to be specified")
+    # parser.add_argument('--class_names', nargs='+', default=['marine_mammal', 'marker', 'unknown', 'vessel'], help='class list in the same order as class enum')
+
+    parser.add_argument('onnx', type=str, default=None)
+    parser.add_argument('--run-id', type=str, default=None, help='Find this from MLflow UI')
+    parser.add_argument('--experiment', type=str, default=None, help="Experiment name to log to")
     args = parser.parse_args()
 
     mlflow.set_tracking_uri("http://gr-nuc-visionai:4242")
@@ -99,7 +110,7 @@ if __name__ == '__main__':
             raise ValueError("Please specify run-id or give an experiment name")
         mlflow.set_experiment(args.experiment)
 
-    if args.ckpt:
-        log_torch(args)
-    if args.onnx:
-        log_onnx(args)
+    # if args.ckpt:
+    #     log_torch(args)
+
+    log_onnx(args)

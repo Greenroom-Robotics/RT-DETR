@@ -20,6 +20,9 @@ class DetSolver(BaseSolver):
         self.train()
         args = self.cfg
 
+        with open(str(self.output_dir / 'config.txt'), 'w') as f:
+            f.write(str(self.cfg.__dict__))
+
         n_parameters = sum([p.numel() for p in self.model.parameters() if p.requires_grad])
         print(f'number of trainable parameters: {n_parameters}')
 
