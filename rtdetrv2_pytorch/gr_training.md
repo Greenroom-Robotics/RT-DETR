@@ -26,15 +26,23 @@ The following commands should all be run inside the rt_detr container.
     ```
     Other checkpoints can be found in the [README.md](README.md)
 
-2. Train RT-DETR Model:
-    ```
+2. Train RT-DETR model:
+    ```bash
     python3 tools/train.py -c /home/ros/RT-DETR/configs/gr/rtdetrv2_r18vd_120e_rgb_12cls.yml -t /home/ros/RT-DETR/checkpoints/rtdetrv2_r18vd_120e_coco_rerun_48.1.pth --use-amp --seed=0
     ```
 
-4. Upload experiment artifacts to MLFlow:
-   
-   After training, convert the model to onnx and log to MLFlow:
+3. Export model to ONNX:
    ```bash
-   python3 tools/log_mlflow_model.py --onnx $ONNXFILE --run-id $RUNID
+   python3 tools/export_onnx.py -c configs/gr/rtdetrv2_r18vd_120e_rgb_12cls.yml -r output/<model>/last.pth --output_file output/<model>/model.onnx
+   ```
+
+4. Create and upload experiment artifacts to MLFlow:
+   ```bash
+   python3 tools/gr_log_mlflow_run.py output/<model> --experiment <experiment> --run-name <run-name>
+
+   ```
+5. Convert and upload onnx to MLFlow:
+   ```bash
+   python3 tools/gr_log_mlflow_model.py output/<model>/model.onnx --run-id <from-previous-step>
    ```
 
