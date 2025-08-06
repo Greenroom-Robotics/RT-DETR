@@ -7,15 +7,14 @@ __include__: [
 ]
 
 
-output_dir: ./output/rtdetrv2_r18vd_120e_rgb_12cls
-num_classes: 13 # Has to be actual number of classes + 1
+num_classes: 15 # Has to be actual number of classes + 1
 epoches: 120
 
 train_dataloader: 
   type: DataLoader
   dataset: 
     type: CocoDetection
-    img_folder: /home/ros/data
+    img_folder: /home/ros/visionai_platform/data
     ann_file: /home/ros/visionai_platform/data/datasets/image/experiments/e25-004-d25-004-14cls/coco_labels/split_train.mapped.json
     return_masks: False
     transforms:
@@ -44,7 +43,7 @@ val_dataloader:
   type: DataLoader
   dataset: 
     type: CocoDetection
-    img_folder: /home/ros/data
+    img_folder: /home/ros/visionai_platform/data
     ann_file: /home/ros/visionai_platform/data/datasets/image/experiments/e25-004-d25-004-14cls/coco_labels/split_test.mapped.json
     return_masks: False
     transforms:

@@ -7,7 +7,6 @@ __include__: [
 ]
 
 
-output_dir: ./output/rtdetrv2_r18vd_120e_ir_1ch
 num_classes: 8 # Has to be actual number of classes + 1
 epoches: 120
 
@@ -15,7 +14,7 @@ train_dataloader:
   type: DataLoader
   dataset: 
     type: CocoDetection
-    img_folder: ./data
+    img_folder: /home/ros/visionai_platform/data
     ann_file: /home/ros/visionai_platform/data/public/massmind/coco_labels/train.mapped.json
     return_masks: False
     transforms:
@@ -43,7 +42,7 @@ val_dataloader:
   type: DataLoader
   dataset: 
     type: CocoDetection
-    img_folder: ./data
+    img_folder: /home/ros/visionai_platform/data
     ann_file: /home/ros/visionai_platform/data/public/massmind/coco_labels/test.mapped.json
     return_masks: False
     transforms:
