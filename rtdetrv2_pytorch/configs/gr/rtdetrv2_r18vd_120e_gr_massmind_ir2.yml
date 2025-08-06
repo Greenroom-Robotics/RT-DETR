@@ -16,7 +16,7 @@ train_dataloader:
   dataset: 
     type: CocoDetection
     img_folder: ./data
-    ann_file: /home/ros/data/public/massmind/coco_labels/train.mapped.json
+    ann_file: /home/ros/visionai_platform/data/public/massmind/coco_labels/train.mapped.json
     return_masks: False
     transforms:
       type: Compose
@@ -44,7 +44,7 @@ val_dataloader:
   dataset: 
     type: CocoDetection
     img_folder: ./data
-    ann_file: /home/ros/data/public/massmind/coco_labels/test.mapped.json
+    ann_file: /home/ros/visionai_platform/data/public/massmind/coco_labels/test.mapped.json
     return_masks: False
     transforms:
       type: Compose
