@@ -5,8 +5,4 @@ RUN pip install -r /tmp/requirements.txt --user
 
 RUN sudo apt-get update && sudo apt-get install -y python3-opencv
 
-# Misc dependencies
-RUN pip install debugpy \
-    mlflow==2.19.0
-
 CMD ["tail", "-f", "/dev/null"]

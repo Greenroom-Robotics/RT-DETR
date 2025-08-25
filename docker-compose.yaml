@@ -10,7 +10,7 @@ services:
     volumes:
       - ./rtdetrv2_pytorch:/home/ros/RT-DETR
       - ./benchmark:/home/ros/RT-DETR/benchmark
-      - /mnt/gr-nas/visionai-data:/home/ros/RT-DETR/data
+      - /mnt/gr-nas/visionai-data:/home/ros/visionai_platform/data
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
     env_file: docker/.env
     privileged: true

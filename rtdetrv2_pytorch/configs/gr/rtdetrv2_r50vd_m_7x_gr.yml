@@ -6,8 +6,6 @@ __include__: [
   './include/rtdetrv2_r50vd.yml',
 ]
 
-output_dir: ./output/rtdetrv2_r50vd_m_6x
-
 
 HybridEncoder:
   expansion: 0.5

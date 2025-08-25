@@ -1,5 +1,7 @@
-English | [简体中文](README_cn.md)
+# Greenroom Specific Instructions
+#### This should be used via https://github.com/Greenroom-Robotics/visionai_platform, see README for more details.
 
+----
 
 <h2 align="center">RT-DETR: DETRs Beat YOLOs on Real-time Object Detection</h2>
 <p align="center">

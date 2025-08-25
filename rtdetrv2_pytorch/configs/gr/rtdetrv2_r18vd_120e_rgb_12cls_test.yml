@@ -8,14 +8,14 @@ __include__: [
 
 
 num_classes: 13 # Has to be actual number of classes + 1
-epoches: 120
+epoches: 1 # For quick training/debugging
 
 train_dataloader: 
   type: DataLoader
   dataset: 
     type: CocoDetection
     img_folder: /home/ros/visionai_platform/data
-    ann_file: /home/ros/visionai_platform/data/datasets/image/experiments/e25-005-d25-005-sc15059-nrma-whales/coco_labels/split_train.mapped.json
+    ann_file: /home/ros/visionai_platform/data/datasets/image/experiments/e25-003-d25-003-12cls/coco_labels/split_train.mapped.json
     return_masks: False
     transforms:
       type: Compose
@@ -34,7 +34,7 @@ train_dataloader:
   collate_fn:
     type: BatchImageCollateFuncion  
     scales: ~
-  total_batch_size: 6
+  total_batch_size: 4
   shuffle: True
   num_workers: 4
   drop_last: True 
@@ -44,14 +44,14 @@ val_dataloader:
   dataset: 
     type: CocoDetection
     img_folder: /home/ros/visionai_platform/data
-    ann_file: /home/ros/visionai_platform/data/datasets/image/experiments/e25-005-d25-005-sc15059-nrma-whales/coco_labels/split_test.mapped.json
+    ann_file: /home/ros/visionai_platform/data/datasets/image/experiments/e25-003-d25-003-12cls/coco_labels/split_test.mapped.json
     return_masks: False
     transforms:
       type: Compose
       ops: 
         - {type: Resize, size: [1280, 1280]}
         - {type: ConvertPILImage, dtype: 'float32', scale: True}   
-  total_batch_size: 32
+  total_batch_size: 4
   shuffle: False
   num_workers: 4
   drop_last: False
