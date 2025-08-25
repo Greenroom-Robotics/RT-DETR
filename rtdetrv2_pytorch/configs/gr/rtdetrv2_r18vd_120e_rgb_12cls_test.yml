@@ -15,7 +15,7 @@ train_dataloader:
   dataset: 
     type: CocoDetection
     img_folder: /home/ros/visionai_platform/data
-    ann_file: /home/ros/visionai_platform/data/datasets/image/experiments/e25-003-d25-003-12cls/coco_labels/split_train.mapped.json
+    ann_file: /home/ros/visionai_platform/data/datasets/image/experiments/e25-005-d25-005-sc15059-nrma-whales/coco_labels/split_train.mapped.json
     return_masks: False
     transforms:
       type: Compose
@@ -44,7 +44,7 @@ val_dataloader:
   dataset: 
     type: CocoDetection
     img_folder: /home/ros/visionai_platform/data
-    ann_file: /home/ros/visionai_platform/data/datasets/image/experiments/e25-003-d25-003-12cls/coco_labels/split_test.mapped.json
+    ann_file: /home/ros/visionai_platform/data/datasets/image/experiments/e25-005-d25-005-sc15059-nrma-whales/coco_labels/split_test.mapped.json
     return_masks: False
     transforms:
       type: Compose
