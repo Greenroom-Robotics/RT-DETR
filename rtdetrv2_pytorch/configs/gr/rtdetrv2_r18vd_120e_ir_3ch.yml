@@ -15,7 +15,7 @@ train_dataloader:
   dataset: 
     type: CocoDetection
     img_folder: /home/ros/visionai_platform/data
-    ann_file: /home/ros/visionai_platform/data/datasets/image/experiments/e25-006-d25-005-sc15319-ir-test/coco_labels/split_train.mapped.json
+    ann_file: /home/ros/visionai_platform/data/datasets/image-ir/experiments/e25-001-d25-001-ir-sc15319-poc/coco_labels/split_train.mapped.json
     return_masks: False
     transforms:
       type: Compose
@@ -43,7 +43,7 @@ val_dataloader:
   dataset: 
     type: CocoDetection
     img_folder: /home/ros/visionai_platform/data
-    ann_file:  /home/ros/visionai_platform/data/datasets/image/experiments/e25-006-d25-005-sc15319-ir-test/coco_labels/split_test.mapped.json
+    ann_file:  /home/ros/visionai_platform/data/datasets/image-ir/experiments/e25-001-d25-001-ir-sc15319-poc/coco_labels/split_test.mapped.json
     return_masks: False
     transforms:
       type: Compose
