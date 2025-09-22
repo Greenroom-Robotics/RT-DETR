@@ -7,7 +7,7 @@ __include__: [
 ]
 
 
-num_classes: 8 # Has to be actual number of classes + 1
+num_classes: 5 # Has to be actual number of classes + 1
 epoches: 120
 
 train_dataloader: 
@@ -15,7 +15,7 @@ train_dataloader:
   dataset: 
     type: CocoDetection
     img_folder: /home/ros/visionai_platform/data
-    ann_file: /home/ros/visionai_platform/data/public/massmind/coco_labels/train.mapped.json
+    ann_file: /home/ros/visionai_platform/data/datasets/image-ir/experiments/e25-001-d25-001-ir-sc15319-poc/coco_labels/split_train.mapped.json
     return_masks: False
     transforms:
       type: Compose
@@ -43,7 +43,7 @@ val_dataloader:
   dataset: 
     type: CocoDetection
     img_folder: /home/ros/visionai_platform/data
-    ann_file: /home/ros/visionai_platform/data/public/massmind/coco_labels/test.mapped.json
+    ann_file:  /home/ros/visionai_platform/data/datasets/image-ir/experiments/e25-001-d25-001-ir-sc15319-poc/coco_labels/split_test.mapped.json
     return_masks: False
     transforms:
       type: Compose
