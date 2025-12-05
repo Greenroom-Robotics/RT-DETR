@@ -100,6 +100,14 @@ def main(args, ):
         onnx.save(onnx_model_simplify, args.output_file)
         print(f'Successfully simplified onnx model: {check}...')
 
+    if args.fix_dimensions:
+        input_shapes = {
+            'images': [1, args.image_channels, resize_h, resize_w],
+            'orig_target_sizes': [1, 2],
+        }
+        onnx_model_simplify, check = onnxsim.simplify(args.output_file, overwrite_input_shapes=input_shapes)
+        onnx.save(onnx_model_simplify, args.output_file)
+        print(f'Successfully fix dimensions for onnx model: {check}...')
 
 if __name__ == '__main__':
     import argparse
@@ -111,6 +119,7 @@ if __name__ == '__main__':
     parser.add_argument('--image_channels', '-i', type=int, default=3, help="Number of image channels. IR has 1 channel")
     parser.add_argument('--check',  action='store_true', default=False,)
     parser.add_argument('--simplify',  action='store_true', default=False,)
+    parser.add_argument("--fix_dimensions", action='store_true', default=False)
     args = parser.parse_args()
 
     main(args)
