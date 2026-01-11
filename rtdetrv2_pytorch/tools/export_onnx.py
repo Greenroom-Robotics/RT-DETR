@@ -1,8 +1,8 @@
 """Copyright(c) 2023 lyuwenyu. All Rights Reserved.
 """
 
-import os 
-import sys 
+import os
+import sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 
 import torch
@@ -12,6 +12,8 @@ from src.core import YAMLConfig
 import json
 import onnx
 import onnxsim
+import numpy as np
+from onnx import TensorProto, helper
 
 def add_meta(onnx_model, key, value):
     # Add meta to model
@@ -22,10 +24,13 @@ def add_meta(onnx_model, key, value):
 def main(args, ):
     """main
     """
-    cfg = YAMLConfig(args.config, resume=args.resume)
+    update_dict = yaml_utils.parse_cli(args.update) if args.update else {}
+    update_dict.update({k: v for k, v in args.__dict__.items() \
+                        if k not in ['update', ] and v is not None})
+    cfg = YAMLConfig(args.config, **update_dict)
 
     if args.resume:
-        checkpoint = torch.load(args.resume, map_location='cpu') 
+        checkpoint = torch.load(args.resume, map_location='cpu')
         if 'ema' in checkpoint:
             state = checkpoint['ema']['module']
         else:
@@ -43,7 +48,7 @@ def main(args, ):
             super().__init__()
             self.model = cfg.model.deploy()
             self.postprocessor = cfg.postprocessor.deploy()
-            
+
         def forward(self, images, orig_target_sizes):
             outputs = self.model(images)
             outputs = self.postprocessor(outputs, orig_target_sizes)
@@ -63,13 +68,13 @@ def main(args, ):
     }
 
     torch.onnx.export(
-        model, 
-        (data, size), 
+        model,
+        (data, size),
         args.output_file,
         input_names=['images', 'orig_target_sizes'],
         output_names=['labels', 'boxes', 'scores'],
         dynamic_axes=dynamic_axes,
-        opset_version=16, 
+        opset_version=16,
         verbose=False,
         do_constant_folding=True,
     )
@@ -101,19 +106,41 @@ def main(args, ):
         print(f'Successfully simplified onnx model: {check}...')
 
     if args.fix_dimensions:
-        input_shapes = {
-            'images': [1, args.image_channels, resize_h, resize_w],
-            'orig_target_sizes': [1, 2],
-        }
-        onnx_model_simplify, check = onnxsim.simplify(args.output_file, overwrite_input_shapes=input_shapes)
-        onnx.save(onnx_model_simplify, args.output_file)
-        print(f'Successfully fix dimensions for onnx model: {check}...')
+        constant_value = np.array([[ resize_h,resize_w ]], dtype=np.int64)
+        const_input(args.output_file, "orig_target_sizes", constant_value)
+
+
+def const_input(model_path, input_name, constant_value):
+    model = onnx.load(model_path)
+
+    initializer = helper.make_tensor(
+        name=input_name,
+        data_type=TensorProto.INT64,
+        dims=constant_value.shape,
+        vals=constant_value.flatten(),
+    )
+
+    model.graph.initializer.append(initializer)
+
+    inputs_to_keep = [inp for inp in model.graph.input if inp.name != input_name]
+
+    del model.graph.input[:]
+    model.graph.input.extend(inputs_to_keep)
+
+    model_simplified, check = onnxsim.simplify(model)
+
+    if check:
+        onnx.save(model_simplified, model_path)
+        print(f"Simplified model saved to {model_path}")
+    else:
+        print("Simplification failed, saving original modification")
+        onnx.save(model, model_path)
 
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('--config', '-c', type=str, )
-    parser.add_argument('--resume', '-r', type=str, )
+    parser.add_argument('--config', '-c', type=str)
+    parser.add_argument('--resume', '-r', type=str)
     parser.add_argument('--output_file', '-o', type=str, default='model.onnx')
     parser.add_argument('--input_size', '-s', type=int, default=1280, help="-s 640 for IR, -s 1280 for RGB")
     parser.add_argument('--image_channels', '-i', type=int, default=3, help="Number of image channels. IR has 1 channel")
