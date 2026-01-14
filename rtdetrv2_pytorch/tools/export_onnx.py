@@ -6,7 +6,7 @@ import sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 
 import torch
-import torch.nn as nn 
+import torch.nn as nn
 import datetime
 from src.core import YAMLConfig
 import json
@@ -24,9 +24,7 @@ def add_meta(onnx_model, key, value):
 def main(args, ):
     """main
     """
-    update_dict = yaml_utils.parse_cli(args.update) if args.update else {}
-    update_dict.update({k: v for k, v in args.__dict__.items() \
-                        if k not in ['update', ] and v is not None})
+    update_dict = {k: v for k, v in args.__dict__.items() if v is not None}
     cfg = YAMLConfig(args.config, **update_dict)
 
     if args.resume:
